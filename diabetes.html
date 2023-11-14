@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDRS Score Calculator</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  .container { max-width: 600px; margin: auto; padding: 20px; }
+  .form-group { margin-bottom: 10px; }
+  label { display: block; margin-bottom: 5px; }
+  .result { margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>IDRS Score Calculator and Risk Of Diabetes </h1>
+  <form id="idrsForm">
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <select id="age" name="age">
+        <option value="<35">Less than 35</option>
+        <option value="35-49">35-49</option>
+        <option value=">=50">50 or older</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="waistCircumference">Waist Circumference:</label>
+      <input type="number" id="waistCircumference" name="waistCircumference" min="1" max="200" />
+    </div>
+    <div class="form-group">
+      <label>Physical Activity:</label>
+      <select id="physicalActivity" name="physicalActivity">
+        <option value="Vigorous">Vigorous exercise or work</option>
+        <option value="Moderate">Moderate exercise at home/work</option>
+        <option value="Mild">Mild exercise at home/work</option>
+        <option value="NoExercise">No exercise and sedentary</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Family History of Diabetes:</label>
+      <select id="familyHistory" name="familyHistory">
+        <option value="NoDiabetes">No diabetes</option>
+        <option value="OneParent">One parent diabetic</option>
+        <option value="BothParents">Both parents diabetic</option>
+      </select>
+    </div>
+    <div class="form-group">
+<label for="state">State:</label>
+<select id="state" name="state">
+<option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chandigarh">Chandigarh</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Delhi">Delhi</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Odisha">Odisha</option>
+<option value="Puducherry">Puducherry</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Telangana">Telangana</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="Uttarakhand">Uttarakhand</option>
+<option value="West Bengal">West Bengal</option>
+</select>
+</div>
+<button type="button" onclick="calculateScore()">Calculate IDRS Score</button>
+  </form>
+  <div class="result" id="result"></div>
+</div>
+<p><b> Coded by Anupam Singh ,MD </b></p>
+<script>
+
+const statePrevalence = {"Andhra Pradesh":9.5,"Arunachal Pradesh":6.0,"Assam":6.7,"Bihar":5.4,"Chandigarh":20.4,"Chhattisgarh":10.3,"Delhi":17.8,"Goa":26.4,"Gujarat":8.2,"Haryana":12.4,"Himachal Pradesh":13.5,"Jharkhand":7.2,"Karnataka":10.6,"Kerala":25.5,"Madhya Pradesh":7.1,"Maharashtra":10.3,"Manipur":6.6,"Meghalaya":5.2,"Mizoram":7.7,"Nagaland":6.0,"Odisha":9.7,"Puducherry":26.3,"Punjab":12.7,"Rajasthan":6.8,"Sikkim":12.8,"Tamil Nadu":14.4,"Telangana":9.9,"Tripura":11.3,"Uttar Pradesh":4.8,"Uttarakhand":11.1,"West Bengal":13.7};
+
+
+</script>
+
+<script>
+const idrsData = {
+    10: {sensitivity: '100', specificity: '0.7'},
+    20: {sensitivity: '99.5', specificity: '1.1'},
+    30: {sensitivity: '97.7', specificity: '7.2'},
+    40: {sensitivity: '93.1', specificity: '25.5'},
+    50: {sensitivity: '84.9', specificity: '39.4'},
+    60: {sensitivity: '72.5', specificity: '60.1'},
+    70: {sensitivity: '42.7', specificity: '81.1'},
+    80: {sensitivity: '15.1', specificity: '95.0'},
+    90: {sensitivity: '2.3', specificity: '99.3'},
+    100: {sensitivity: '0.5', specificity: '99.9'}
+};
+
+function calculateScore() {
+    let age = document.getElementById('age').value;
+    let waistCircumference = document.getElementById('waistCircumference').value;
+    let physicalActivity = document.getElementById('physicalActivity').value;
+    let familyHistory = document.getElementById('familyHistory').value;
+    var state = document.getElementById('state').value;
+  var prevalence = statePrevalence[state];
+  
+    let score = 0;
+
+    // Add points based on age
+    if (age === '35-49') score += 20;
+    if (age === '>=50') score += 30;
+
+    // Add points based on waist circumference
+    if (waistCircumference >= 90 && waistCircumference < 100) score += 10;
+    if (waistCircumference >= 100) score += 20;
+
+    // Add points based on physical activity
+    if (physicalActivity === 'Moderate') score += 10;
+    if (physicalActivity === 'Mild') score += 20;
+    if (physicalActivity === 'NoExercise') score += 30;
+
+    // Add points based on family history
+    if (familyHistory === 'OneParent') score += 10;
+    if (familyHistory === 'BothParents') score += 20;
+
+    // Find the closest IDRS score to the calculated score and get the corresponding sensitivity and specificity
+    let closestIDRS = Object.keys(idrsData).reduce((prev, curr) => 
+        Math.abs(curr - score) < Math.abs(prev - score) ? curr : prev);
+
+    let sensitivity = idrsData[closestIDRS].sensitivity;
+    let specificity = idrsData[closestIDRS].specificity;
+    var ppv = prevalence*(sensitivity )/(100-specificity)
+    var mpv = ppv.toFixed(2)
+    // Display the result
+    document.getElementById('result').innerText = 'Your IDRS Score is ' + score + 
+        '. The sensitivity of this score for detecting diabetes is ' + sensitivity + 
+        '% and specificity is ' + specificity + '%.'+ ' Your Selected State is ' + state + ' The prevalence of Diabetes in your state as per latest ICMR-INDIAB data published (RM Anjana et al The Lancet Diabetes & Endocrinology (2023) ' + prevalence + ' % .' + 'Your  Probability of Diabetes taking into account your IDRS Score , its test performance (as per original paper)  and your state is ' + mpv + ' % .' ;
+}
+
+</script>
+</body>
+</html>
